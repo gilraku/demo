@@ -62,3 +62,15 @@ Versi Pages memuat aset Kenney lokal dan salinan regulasi bertanggal dari
 jenis pada hasil tersimpan. Pencarian bebas di luar topik tersebut memerlukan
 Pasal.id atau deployment server Next.js. Token API tidak diperlukan di Pages
 dan tidak disertakan dalam hasil build.
+
+## Vercel (server dan API langsung)
+
+Proyek Vercel `bentang-tambang` terhubung ke repo GitHub ini. Production memakai
+`npm run build` dengan server Next.js dan route `/api/regulations`.
+Atur `PASAL_API_TOKEN` sebagai environment variable **Sensitive** untuk Production
+pada Vercel. Jangan aktifkan `NEXT_PUBLIC_STATIC_EXPORT` atau
+`NEXT_PUBLIC_BASE_PATH` di Vercel; keduanya khusus build GitHub Pages.
+
+`vercel.json` mengarahkan cache ke `/tmp/bentang-tambang/pasal`, yang bersifat
+sementara per instance. Salinan regulasi bawaan tetap tersedia saat API bermasalah.
+`.vercelignore` mengecualikan file environment lokal dari unggahan deployment.
