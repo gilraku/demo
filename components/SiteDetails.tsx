@@ -14,7 +14,7 @@ import {
 import { heightAt, random, riverX } from "@/lib/terrain";
 import { pond } from "@/lib/site-layout";
 import { conveyorPlacements, pondWaterLevels } from "@/lib/detail-layout";
-import { createPondBerm } from "@/lib/detail-geometry";
+import { createCoalHeap, createPondBerm } from "@/lib/detail-geometry";
 import type { Stage } from "@/lib/topics";
 import SiteAsset from "./SiteAsset";
 
@@ -125,6 +125,8 @@ function CoalOnBelt({ paused }: { paused: boolean }) {
   );
 }
 export function Stockpile({ paused }: { paused: boolean }) {
+  const heaps = useMemo(() => [0, 1, 2].map(createCoalHeap), []);
+  useEffect(() => () => heaps.forEach(g => g.dispose()), [heaps]);
   return (
     <group>
       <mesh
@@ -137,18 +139,20 @@ export function Stockpile({ paused }: { paused: boolean }) {
         <meshToonMaterial color="#a99a7b" />
       </mesh>
       {[
-        { x: 9.5, z: -6.7, h: 1.6, r: 1.65 },
-        { x: 12.3, z: -5.9, h: 2.05, r: 1.8 },
-        { x: 11.2, z: -3.9, h: 0.7, r: 0.8 },
+        { x: 9.5, z: -6.7, h: 1.25, r: 1.8 },
+        { x: 12.3, z: -5.9, h: 1.65, r: 2.0 },
+        { x: 15.45, z: -3.55, h: 0.42, r: 0.7 },
       ].map((pile, i) => (
         <mesh
           key={i}
-          position={[pile.x, 1.2 + pile.h / 2, pile.z]}
+          position={[pile.x, 1.23, pile.z]}
+          geometry={heaps[i]}
+          scale={[pile.r, pile.h, pile.r * 0.8]}
           rotation={[0, i * 0.7, 0]}
           castShadow
           receiveShadow
         >
-          <coneGeometry args={[pile.r, pile.h, 9]} />
+
           <meshToonMaterial color={i === 1 ? "#29302d" : "#333b34"} />
         </mesh>
       ))}
@@ -165,6 +169,10 @@ export function Stockpile({ paused }: { paused: boolean }) {
         <SiteAsset kind="hopper" width={0.95} position={[15.7, 1.52, -8.55]} />
       </Suspense>
       <CoalOnBelt paused={paused} />
+      <mesh position={[15.7, 1.48, -3.92]} rotation={[0.28, 0, 0]} receiveShadow>
+        <boxGeometry args={[0.58, 0.07, 0.65]} />
+        <meshToonMaterial color="#697570" />
+      </mesh>
       <Path
         points={[
           [15.7, -3.6],
@@ -362,4 +370,31 @@ export function VillageDetails({ stage }: { stage: Stage }) {
       })}
     </group>
   );
+}
+
+/** The apron shoulders follow the terrain instead of leaving an exposed slab. */
+export function WorkshopFoundation() {
+  const geometry = useMemo(() => {
+    const vertices: number[] = [];
+    const edge: [number, number][] = [];
+    for (let side = 0; side < 4; side++) for (let i = 0; i < 24; i++) {
+      const t = i / 24;
+      edge.push(side === 0 ? [-5.9 + 11.8 * t, -3.9] : side === 1 ? [5.9, -3.9 + 7.8 * t] : side === 2 ? [5.9 - 11.8 * t, 3.9] : [-5.9, 3.9 - 7.8 * t]);
+    }
+    const top = ([x,z]: [number,number]) => [x, -0.16, z];
+    const toe = ([x,z]: [number,number]) => {
+      const tx = x * 1.17, tz = z * 1.2;
+      return [tx, Math.min(-0.18, heightAt(10 + tx, -17 + tz, 'active') - 1.24), tz];
+    };
+    edge.forEach((a,i) => {
+      const b = edge[(i+1)%edge.length];
+      vertices.push(...top(a), ...top(b), ...toe(a), ...toe(a), ...top(b), ...toe(b));
+    });
+    const g = new BufferGeometry();
+    g.setAttribute('position', new Float32BufferAttribute(vertices, 3));
+    g.computeVertexNormals();
+    return g;
+  }, []);
+  useEffect(() => () => geometry.dispose(), [geometry]);
+  return <mesh geometry={geometry} receiveShadow castShadow><meshToonMaterial color="#90836b" side={DoubleSide} /></mesh>;
 }

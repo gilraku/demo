@@ -27,3 +27,26 @@ export function createPondBerm() {
   geometry.computeVertexNormals();
   return geometry;
 }
+
+/** Low, irregular ridges rather than pointed cone primitives. */
+export function createCoalHeap(seed = 0) {
+  const vertices: number[] = [];
+  const rings = [1, 0.7, 0.3, 0];
+  const heights = [0, 0.42, 0.83, 0.92];
+  const n = 14;
+  const point = (ring: number, i: number) => {
+    const a = (i % n) / n * Math.PI * 2;
+    const wobble = 1 + Math.sin(a * 3 + seed) * 0.11 + Math.cos(a * 5 + seed) * 0.06;
+    return [Math.cos(a) * rings[ring] * wobble + ring * 0.055,
+      heights[ring] * (1 + Math.sin(a * 2 + seed) * 0.06),
+      Math.sin(a) * rings[ring] * wobble];
+  };
+  for (let r = 0; r < 3; r++) for (let i = 0; i < n; i++) {
+    const a = point(r, i), b = point(r, i + 1), c = point(r + 1, i), d = point(r + 1, i + 1);
+    vertices.push(...a, ...c, ...b, ...b, ...c, ...d);
+  }
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
+  geometry.computeVertexNormals();
+  return geometry;
+}

@@ -81,7 +81,7 @@ export function heightAt(x: number, z: number, stage: Stage) {
     h = mix(bench, h, smooth(0.94, 1.08, r));
   }
   const riverDistance = Math.abs(x - riverX(z));
-  h = mix(-0.35, h, smooth(1.1, 3.1, riverDistance));
+  h = mix(-0.35, h, smooth(1.1, 3.6 + smooth(2, 8, h) * (5.5 + Math.sin(z * 0.07)), riverDistance));
   return h;
 }
 

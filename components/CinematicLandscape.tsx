@@ -37,10 +37,10 @@ function CameraRig({ selected, stage, zoom, reset }: Omit<Props, "onSelect">) {
   useEffect(() => {
     const p = selected ? sitePositions[selected] : null;
     if (p) target.current.set(p[0] + 4, heightAt(p[0], p[1], stage), p[1]);
-    else target.current.set(1, 0, -3);
+    else target.current.set(5, 0, 0);
     const mobile = size.width < 700,
       factor = Math.pow(1.16, -zoom) * (mobile ? 1.35 : 1);
-    const offset = p ? new Vector3(20, 15, 24) : new Vector3(37, 29, 44);
+    const offset = p ? new Vector3(20, 15, 24) : new Vector3(44, 37, 53);
     destination.current.copy(target.current).add(offset.multiplyScalar(factor));
     moving.current = true;
     invalidate();

@@ -23,7 +23,7 @@ import { Line } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import StagePresence from "./StagePresence";
 import IndustrialBuilding from "./IndustrialBuildings";
-import { Stockpile, SedimentPonds, VillageDetails } from "./SiteDetails";
+import { WorkshopFoundation, Stockpile, SedimentPonds, VillageDetails } from "./SiteDetails";
 import {
   haulRoad,
   serviceRoad,
@@ -484,7 +484,7 @@ function Forest({ stage, paused }: { stage: Stage; paused: boolean }) {
 
       let scaleActive = baseScale;
       if (
-        workingArea(x, z) ||
+        workingArea(x, z, baseScale * 1.12) ||
         !clearOfOperationalRoads(x, z, baseScale * 1.12) ||
         r < 1.3
       ) {
@@ -493,7 +493,7 @@ function Forest({ stage, paused }: { stage: Stage; paused: boolean }) {
 
       let scalePost = baseScale;
       if (
-        workingArea(x, z) ||
+        workingArea(x, z, baseScale * 1.12) ||
         !clearOfOperationalRoads(x, z, baseScale * 1.12)
       ) {
         scalePost = 0;
@@ -836,6 +836,7 @@ function Operations({ stage, paused }: { stage: Stage; paused: boolean }) {
       {/* 2. MAIN WORKSHOP & OPERATIONAL FACILITY                   */}
       {/* ========================================================= */}
       <group position={[10, 1.2, -17]}>
+        <WorkshopFoundation />
         <Box p={[0, -0.08, 0]} s={[11.8, 0.2, 7.8]} c="#b0a58b" />
 
         <Suspense fallback={null}>

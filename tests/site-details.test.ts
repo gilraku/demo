@@ -26,3 +26,19 @@ test("three pond cells descend toward the outlet and berms leave open water", ()
   }
   geometry.dispose();
 });
+
+test('industrial clearing includes tree canopy overlapping the pad edge', async () => {
+  const { workingArea } = await import('../lib/site-layout');
+  assert.equal(workingArea(6, -5, 1.2), true);
+  assert.equal(workingArea(-30, -5, 1.2), false);
+});
+
+test('coal heap is grounded and has finite normals', async () => {
+  const { createCoalHeap } = await import('../lib/detail-geometry');
+  const g = createCoalHeap(1);
+  g.computeBoundingBox();
+  assert.equal(g.boundingBox!.min.y, 0);
+  assert.ok(g.boundingBox!.max.y < 1.1);
+  assert.ok(Array.from(g.getAttribute('normal').array).every(Number.isFinite));
+  g.dispose();
+});

@@ -31,11 +31,11 @@ export function distanceToRoad(x: number, z: number, points: Point[]) {
   }
   return distance;
 }
-export function workingArea(x: number, z: number) {
+export function workingArea(x: number, z: number, radius = 0) {
   return (
-    (x > 1 && x < 18 && z > -23 && z < -11) ||
-    (x > 7 && x < 18 && z > -10 && z < -2) ||
-    (x > 8 && x < 18 && z > 12 && z < 22)
+    (x > 1 - radius && x < 18 + radius && z > -23 - radius && z < -11 + radius) ||
+    (x > 6.5 - radius && x < 18 + radius && z > -10.5 - radius && z < -1.5 + radius) ||
+    (x > 8 - radius && x < 18 + radius && z > 12 - radius && z < 22 + radius)
   );
 }
 

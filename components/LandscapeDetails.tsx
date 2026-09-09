@@ -25,7 +25,7 @@ function habitat(stage: Stage, rocks: boolean) {
     if (
       stage !== "pre" &&
       (pitRadius(x, z) < 1.35 ||
-        workingArea(x, z) ||
+        workingArea(x, z, 1.5) ||
         !clearOfOperationalRoads(x, z, footprintRadius))
     )
       continue;
