@@ -1,0 +1,21 @@
+{
+  "source": "https://kenney.nl/assets/factory-kit",
+  "license": "CC0-1.0",
+  "files": [
+    {
+      "file": "conveyor-long-sides.glb",
+      "bytes": 22100,
+      "sha256": "511a8f3613c20ccf8039cdc63b7635b9e2fba928c2c9a8a13a63b3e33864b310"
+    },
+    {
+      "file": "hopper-square.glb",
+      "bytes": 10092,
+      "sha256": "1b88e30011629015cea65777c5157026088ea557163bee43596d5083f1df0f39"
+    },
+    {
+      "file": "Textures/colormap.png",
+      "bytes": 11813,
+      "sha256": "35d7bd6900dde0208429eeaec87fa17fbf024ed59f3f4eab54bc92802eba9dd7"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "creator": "Kenney",
+  "pack": "Nature Kit",
+  "license": "CC0-1.0",
+  "source": "https://kenney.nl/assets/nature-kit",
+  "download": "https://kenney.nl/media/pages/assets/nature-kit/37ac38a37b-1677698939/kenney_nature-kit.zip",
+  "files": [
+    {
+      "file": "tree_oak.glb",
+      "bytes": 14644,
+      "sha256": "d7fd8773674928c50c11b66d12c636d49bdcc15a8b1c7fbb98e6f63a3439a3f3"
+    },
+    {
+      "file": "tree_detailed.glb",
+      "bytes": 31412,
+      "sha256": "c041daf2f0fb1d49e4325227cbcd58667adbe51e9b55e8c1f0a94b74cc521b3b"
+    },
+    {
+      "file": "tree_palm.glb",
+      "bytes": 13616,
+      "sha256": "27bbb23d26ed788d84de6df2f7fab0acc3fe0ff16c7d08cdcfa1fffcb11de324"
+    },
+    {
+      "file": "plant_bushDetailed.glb",
+      "bytes": 10172,
+      "sha256": "2e0487020d68ccf664435db9d829c78ae00e6d2785ee3ec10b9f89cc70a10406"
+    },
+    {
+      "file": "grass_leafsLarge.glb",
+      "bytes": 13988,
+      "sha256": "a68b9b3d9639afaeb4ace840d5a8e3f21ffc4e8afc1eab15566500fbb2bee3e3"
+    },
+    {
+      "file": "stone_largeC.glb",
+      "bytes": 6580,
+      "sha256": "f78e984f04f2c9d3a242d42b1c8f65b8a095b9ccf9f74ac55a97b7cdd1c4668c"
+    },
+    {
+      "file": "rock_largeA.glb",
+      "bytes": 7552,
+      "sha256": "6dd15390fd96501dcd1454765a17ba61dbbd8d47705dfe5149c8dd92b353ce25"
+    },
+    {
+      "file": "fence_simpleLow.glb",
+      "bytes": 4312,
+      "sha256": "f48ce73576b4976da6416f4b4c1e221cb4b617dba6f9f52affda283910f75755"
+    },
+    {
+      "file": "fence_gate.glb",
+      "bytes": 27652,
+      "sha256": "34d10d5620179b8a211a01eea837caa828c0782422f0b408e1a5838788888436"
+    }
+  ]
+}
