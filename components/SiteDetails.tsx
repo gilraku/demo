@@ -130,13 +130,13 @@ export function Stockpile({ paused }: { paused: boolean }) {
   return (
     <group>
       <mesh
-        position={[12, 1.225, -6]}
+        position={[12, 1.205, -6]}
         rotation={[-Math.PI / 2, 0, 0]}
-        scale={[5.2, 3.5, 1]}
+        scale={[6.1, 4.15, 1]}
         receiveShadow
       >
         <circleGeometry args={[1, 24]} />
-        <meshToonMaterial color="#a99a7b" />
+        <meshToonMaterial color="#91836b" />
       </mesh>
       {[
         { x: 9.5, z: -6.7, h: 1.25, r: 1.8 },
@@ -168,6 +168,35 @@ export function Stockpile({ paused }: { paused: boolean }) {
         ))}
         <SiteAsset kind="hopper" width={0.95} position={[15.7, 1.52, -8.55]} />
       </Suspense>
+      {/* Low curbs make the coal yard read as a contained operational area. */}
+      <Block
+        position={[11.8, 1.3, -8.55]}
+        size={[6.2, 0.16, 0.22]}
+        color="#6f695a"
+      />
+      <Block
+        position={[8.72, 1.3, -6.75]}
+        size={[0.22, 0.16, 3.7]}
+        color="#6f695a"
+      />
+      {/* Concrete legs and a safety beam give the conveyor a clearer silhouette. */}
+      {conveyorPlacements.map(([x, z], i) => (
+        <group key={`conveyor-frame-${i}`} position={[x, 0, z]}>
+          {[-0.52, 0.52].map((offset) => (
+            <Block
+              key={offset}
+              position={[offset, 0.93, 0]}
+              size={[0.14, 0.66, 0.14]}
+              color="#5e6b64"
+            />
+          ))}
+          <Block
+            position={[0, 1.28, 0]}
+            size={[1.25, 0.1, 0.14]}
+            color={i === 1 ? "#c49b3d" : "#7b8579"}
+          />
+        </group>
+      ))}
       <CoalOnBelt paused={paused} />
       <mesh position={[15.7, 1.48, -3.92]} rotation={[0.28, 0, 0]} receiveShadow>
         <boxGeometry args={[0.58, 0.07, 0.65]} />

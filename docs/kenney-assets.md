@@ -117,3 +117,18 @@ Validasi akhir detail situs: 26 tes unit dan TypeScript lulus; uji browser
 pemuatan aset, perpindahan tahap cepat, dan jeda lulus tanpa screenshot
 otomatis (4,6 menit). Screenshot operasi tersimpan di
 `test-results/site-details-active.png` dan telah diperiksa.
+
+## Permukiman demo — 13 September 2026
+
+City Kit Suburban (Kenney, CC0) menambah tiga variasi rumah lokal:
+`building-type-a`, `building-type-g`, dan `building-type-s`. Model dipakai
+bergantian pada sembilan rumah agar siluet permukiman tidak repetitif.
+Tekstur `Textures/colormap.png` disalin mengikuti path relatif yang direferensikan
+oleh GLB; material runtime di-clone lalu diberi pencahayaan toon dan tint hangat.
+Manifest SHA-256 serta lisensi berada di `public/assets/kenney/suburban/`.
+
+Stockpile tetap menggunakan heap batubara custom proyek dengan conveyor dan
+hopper dari Factory Kit. Apron, curb penahan, kaki conveyor, dan beam keselamatan
+ditambahkan sebagai geometri ringan agar area penyimpanan terbaca lebih jelas
+dari kamera presentasi. Truk angkut tetap custom agar ukuran, warna keselamatan,
+dan animasinya konsisten dengan scene.

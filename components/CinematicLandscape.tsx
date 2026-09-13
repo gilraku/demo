@@ -18,7 +18,7 @@ type Props = {
   paused?: boolean;
 };
 
-function CameraRig({ selected, stage, zoom, reset }: Omit<Props, "onSelect">) {
+function CameraRig({ selected, stage, zoom, reset, paused }: Omit<Props, "onSelect">) {
   const controls = useRef<OrbitControlsType>(null),
     moving = useRef(true),
     reduce = useRef(false);
@@ -46,7 +46,7 @@ function CameraRig({ selected, stage, zoom, reset }: Omit<Props, "onSelect">) {
     invalidate();
   }, [selected, stage, zoom, reset, size.width, invalidate]);
   useFrame((_, dt) => {
-    if (!controls.current || !moving.current) return;
+    if (!controls.current || !moving.current || paused) return;
     const alpha = reduce.current ? 1 : 1 - Math.exp(-dt * 3.2);
     camera.position.lerp(destination.current, alpha);
     controls.current.target.lerp(target.current, alpha);

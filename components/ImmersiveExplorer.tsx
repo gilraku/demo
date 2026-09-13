@@ -117,7 +117,10 @@ export default function ImmersiveExplorer() {
           <ArrowUpRight size={14} />
         </button>
       </header>
-      {tab === "world" ? (
+      <div
+        className={`world-layer ${tab === "world" ? "" : "is-hidden"}`}
+        aria-hidden={tab !== "world"}
+      >
         <>
           <div className="world-viewport">
             <Landscape
@@ -126,7 +129,7 @@ export default function ImmersiveExplorer() {
               onSelect={select}
               zoom={zoom}
               reset={reset}
-              paused={paused}
+              paused={paused || tab !== "world"}
             />
           </div>
           <div className="world-shade" aria-hidden="true" />
@@ -299,8 +302,10 @@ export default function ImmersiveExplorer() {
             </aside>
           ) : null}
         </>
-      ) : (
-        <section className="library-page">
+      </div>
+      {tab === "library" ? (
+        <div className="library-layer">
+          <section className="library-page">
           <div className="library-heading">
             <span className="library-eyebrow">
               Referensi lingkungan & pertambangan
@@ -333,8 +338,9 @@ export default function ImmersiveExplorer() {
             </aside>
             <Regulations query={query} />
           </div>
-        </section>
-      )}
+          </section>
+        </div>
+      ) : null}
       <dialog
         ref={about}
         className="about-dialog"

@@ -11,9 +11,16 @@ test("full-screen landscape, location drawer, stages and regulation reader", asy
     page.getByRole("heading", { name: "Di dalam operasi." }),
   ).toBeVisible();
   await expect(page.locator("canvas")).toBeVisible({ timeout: 20000 });
+  await page.evaluate(() => {
+    (window as Window & { __initialCanvas?: HTMLCanvasElement }).__initialCanvas =
+      document.querySelector("canvas") || undefined;
+  });
   await expect(
     page.getByRole("button", { name: "Jelajahi Pengelolaan air", exact: true }),
   ).toBeVisible({ timeout: 20000 });
+  await expect(
+    page.getByRole("button", { name: "Lahan reklamasi", exact: true }),
+  ).toHaveCount(0);
   await expect(page.locator(".context-drawer")).toHaveCount(0);
   expect(
     await page.evaluate(
@@ -58,6 +65,15 @@ test("full-screen landscape, location drawer, stages and regulation reader", asy
   await expect(
     page.getByRole("heading", { name: "Pustaka regulasi." }),
   ).toBeVisible();
+  expect(
+    await page.evaluate(
+      () =>
+        (window as Window & { __initialCanvas?: HTMLCanvasElement }).__initialCanvas ===
+        document.querySelector("canvas"),
+    ),
+  ).toBe(true);
+  await page.getByRole("button", { name: "Jelajah", exact: true }).click();
+  await expect(page.locator("canvas")).toBeVisible({ timeout: 20000 });
   expect(errors).toEqual([]);
 });
 
@@ -70,12 +86,21 @@ test("mobile landscape and keyboard location open a usable bottom sheet", async 
   await expect(
     page.getByRole("button", { name: "Jelajahi Pengelolaan air", exact: true }),
   ).toBeVisible({ timeout: 20000 });
+  await expect(
+    page.getByRole("button", { name: "Lahan reklamasi", exact: true }),
+  ).toHaveCount(0);
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
   await page.screenshot({ path: "test-results/cinematic-mobile.png" });
+  await page
+    .getByRole("button", { name: "03 Pascatambang", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Lahan reklamasi", exact: true }),
+  ).toBeVisible();
   await page
     .getByRole("button", { name: "Lahan reklamasi", exact: true })
     .focus();

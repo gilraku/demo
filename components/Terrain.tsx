@@ -23,6 +23,7 @@ import { Line } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import StagePresence from "./StagePresence";
 import IndustrialBuilding from "./IndustrialBuildings";
+import ResidentialBuilding from "./ResidentialBuilding";
 import { WorkshopFoundation, Stockpile, SedimentPonds, VillageDetails } from "./SiteDetails";
 import {
   haulRoad,
@@ -40,6 +41,7 @@ import {
   riverX,
   smooth,
 } from "@/lib/terrain";
+import type { ResidentialAssetModel } from "@/lib/residential-assets";
 import type { Stage } from "@/lib/topics";
 import LandscapeDetails from "./LandscapeDetails";
 import NatureInstances from "./NatureInstances";
@@ -644,6 +646,7 @@ function Box({
   rot = 0,
   roughness = 0.8,
   metalness = 0.1,
+  toon = false,
 }: {
   p: [number, number, number];
   s: [number, number, number];
@@ -651,15 +654,20 @@ function Box({
   rot?: number;
   roughness?: number;
   metalness?: number;
+  toon?: boolean;
 }) {
   return (
     <mesh position={p} rotation={[0, rot, 0]} castShadow receiveShadow>
       <boxGeometry args={s} />
-      <meshStandardMaterial
-        color={c}
-        roughness={roughness}
-        metalness={metalness}
-      />
+      {toon ? (
+        <meshToonMaterial color={c} />
+      ) : (
+        <meshStandardMaterial
+          color={c}
+          roughness={roughness}
+          metalness={metalness}
+        />
+      )}
     </mesh>
   );
 }
@@ -680,23 +688,26 @@ function Truck({
     <group
       position={[x, heightAt(x, z, stage), z]}
       rotation={[0, rotation, 0]}
-      scale={0.85}
+      scale={1.04}
     >
-      <Box p={[0, 0.55, 0]} s={[2.8, 0.35, 1.25]} c="#d4a638" />
-      <Box p={[0.85, 1.1, -0.38]} s={[0.85, 0.95, 0.7]} c="#d4a638" />
-      <Box p={[0.98, 1.25, -0.38]} s={[0.62, 0.38, 0.73]} c="#29494c" />
-      <group position={[-0.5, 0.95, 0]} rotation={[0, 0, -0.1]}>
-        <Box p={[0, 0, 0]} s={[1.95, 0.22, 1.65]} c="#d4a638" />
+      <Box p={[0, 0.55, 0]} s={[3.2, 0.38, 1.4]} c="#d4a638" toon />
+      <Box p={[1.03, 1.12, -0.37]} s={[0.92, 1.02, 0.86]} c="#d4a638" toon />
+      <Box p={[1.12, 1.28, -0.37]} s={[0.67, 0.42, 0.88]} c="#29494c" toon />
+      <Box p={[1.55, 0.64, -0.37]} s={[0.16, 0.18, 0.94]} c="#b98629" toon />
+      <Box p={[1.68, 0.58, -0.37]} s={[0.2, 0.16, 1.05]} c="#26302e" toon />
+      <group position={[-0.54, 0.96, 0]} rotation={[0, 0, -0.1]}>
+        <Box p={[0, 0, 0]} s={[2.12, 0.24, 1.78]} c="#d4a638" toon />
         {[-0.77, 0.77].map((side) => (
           <Box
             key={side}
-            p={[0, 0.32, side]}
-            s={[1.95, 0.64, 0.14]}
+            p={[0, 0.35, side]}
+            s={[2.12, 0.7, 0.15]}
             c="#d4a638"
+            toon
           />
         ))}
-        <Box p={[-0.92, 0.3, 0]} s={[0.14, 0.6, 1.65]} c="#bf902e" />
-        <Box p={[0.9, 0.34, 0]} s={[0.14, 0.68, 1.65]} c="#d4a638" />
+        <Box p={[-1, 0.3, 0]} s={[0.16, 0.62, 1.78]} c="#bf902e" toon />
+        <Box p={[0.98, 0.34, 0]} s={[0.16, 0.72, 1.78]} c="#d4a638" toon />
         <mesh position={[0, 0.4, 0]} scale={[1.05, 0.45, 0.72]} castShadow>
           <dodecahedronGeometry args={[0.9, 0]} />
           <meshToonMaterial color="#252d2c" />
@@ -704,21 +715,23 @@ function Truck({
       </group>
       {[-0.88, 0.88].flatMap((axle) =>
         [-0.8, 0.8].map((side) => (
-          <group key={`${axle}-${side}`} position={[axle, 0.48, side]}>
+          <group key={`${axle}-${side}`} position={[axle, 0.47, side]}>
             <mesh rotation={[Math.PI / 2, 0, 0]} castShadow>
-              <cylinderGeometry args={[0.48, 0.48, 0.36, 12]} />
+              <cylinderGeometry args={[0.54, 0.54, 0.4, 12]} />
               <meshToonMaterial color="#27302e" />
             </mesh>
             <mesh
               position={[0, 0, Math.sign(side) * 0.19]}
               rotation={[Math.PI / 2, 0, 0]}
             >
-              <cylinderGeometry args={[0.23, 0.23, 0.04, 10]} />
+              <cylinderGeometry args={[0.25, 0.25, 0.05, 10]} />
               <meshToonMaterial color="#d4a638" />
             </mesh>
           </group>
         )),
       )}
+      <Box p={[1.72, 0.76, -0.37]} s={[0.06, 0.12, 0.24]} c="#f7dc78" toon />
+      <Box p={[1.72, 0.76, 0.37]} s={[0.06, 0.12, 0.24]} c="#f7dc78" toon />
     </group>
   );
 }
@@ -976,103 +989,29 @@ function Village({ stage }: { stage: Stage }) {
       {/* ========================================================= */}
       {/* 4. COMMUNITY VILLAGE SETTLEMENT (PERMUKIMAN WARGA)        */}
       {/* ========================================================= */}
-      {/* Vernacular Stilt Architecture on Terraced Stone Pads       */}
-      {Array.from({ length: 9 }, (_, i) => {
-        const col = i % 3;
-        const row = Math.floor(i / 3);
-        const vx = 26 + col * 2.8;
-        const vz = -20 + row * 3.2;
-        const vh = heightAt(vx, vz, stage);
-
-        // Roof and wall color palettes inspired by Indonesian rural villages:
-        const roofColors = [
-          "#824632",
-          "#4a5446",
-          "#73493b",
-          "#613b2d",
-          "#3d4b47",
-          "#8c5339",
-          "#4f3b2d",
-          "#5e5246",
-          "#7b4131",
-        ];
-        const wallColors = [
-          "#cbb998",
-          "#b8a685",
-          "#d6c5a6",
-          "#c2b090",
-          "#ab9b7d",
-          "#d1c2a1",
-          "#bead8e",
-          "#c5b697",
-          "#bca98a",
-        ];
-
-        return (
-          <group key={`house-${i}`} position={[vx, vh, vz]}>
-            {/* Embedded Stone Foundation Terrace (ZERO FLOATING) */}
-            <Box
-              p={[0, -0.25, 0]}
-              s={[1.9, 0.6, 1.9]}
-              c="#53514a"
-              roughness={0.95}
+      <Suspense fallback={null}>
+        {([
+          ["building-type-a", 26, -20, 0],
+          ["building-type-g", 28.8, -20, Math.PI],
+          ["building-type-s", 31.6, -20, 0],
+          ["building-type-g", 26, -16.8, Math.PI],
+          ["building-type-s", 28.8, -16.8, 0],
+          ["building-type-a", 31.6, -16.8, Math.PI],
+          ["building-type-s", 26, -13.6, 0],
+          ["building-type-a", 28.8, -13.6, Math.PI],
+          ["building-type-g", 31.6, -13.6, 0],
+        ] as [ResidentialAssetModel, number, number, number][]).map(
+          ([model, x, z, rotation], i) => (
+            <ResidentialBuilding
+              key={`house-${i}`}
+              model={model}
+              width={2.35}
+              position={[x, heightAt(x, z, stage), z]}
+              rotation={rotation}
             />
-
-            {/* Timber Stilts & Substructure */}
-            {[-0.65, 0.65].flatMap((sx) =>
-              [-0.65, 0.65].map((sz) => (
-                <Box
-                  key={`stilt-${sx}-${sz}`}
-                  p={[sx, 0.18, sz]}
-                  s={[0.1, 0.45, 0.1]}
-                  c="#45382b"
-                  roughness={0.9}
-                />
-              )),
-            )}
-
-            {/* Raised Timber Floor Platform */}
-            <Box
-              p={[0, 0.42, 0]}
-              s={[1.7, 0.1, 1.7]}
-              c="#6e553e"
-              roughness={0.8}
-            />
-
-            {/* House Living Quarters */}
-            <Box
-              p={[0, 0.95, -0.1]}
-              s={[1.45, 0.95, 1.35]}
-              c={wallColors[i % wallColors.length]}
-              roughness={0.7}
-            />
-
-            {/* Front Veranda / Porch */}
-            <Box
-              p={[0, 0.72, 0.68]}
-              s={[1.45, 0.52, 0.04]}
-              c="#5a4533"
-              roughness={0.8}
-            />
-
-            {/* Vernacular Pitched Limasan / Gable Roof with Eaves Overhang */}
-            <mesh
-              position={[0, 1.62, -0.1]}
-              rotation={[0, Math.PI / 4, 0]}
-              castShadow
-            >
-              <coneGeometry args={[1.35, 0.75, 4]} />
-              <meshStandardMaterial
-                color={roofColors[i % roofColors.length]}
-                roughness={0.65}
-              />
-            </mesh>
-
-            {/* Front Door */}
-            <Box p={[0, 0.75, 0.58]} s={[0.32, 0.58, 0.04]} c="#3b2b1f" />
-          </group>
-        );
-      })}
+          ),
+        )}
+      </Suspense>
     </group>
   );
 }

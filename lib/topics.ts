@@ -111,7 +111,7 @@ export const topics: Topic[] = [
     short: "Lahan reklamasi",
     category: "Pemulihan",
     query: "reklamasi pascatambang",
-    stages: ["active", "post"],
+    stages: ["post"],
     position: [-3.1, 1.65, -2.5],
     description:
       "Pelajari keterkaitan perencanaan pemulihan, pelaksanaan reklamasi, dan pemantauan hasil pada lahan bekas tambang.",

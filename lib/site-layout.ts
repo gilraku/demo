@@ -65,6 +65,18 @@ const corridors = [
   halfWidth: width / 2,
 }));
 
+const operationalRoadDistanceCache = new Map<string, number[]>();
+
+function distanceToOperationalRoads(x: number, z: number) {
+  const key = `${x}:${z}`;
+  const cached = operationalRoadDistanceCache.get(key);
+  if (cached !== undefined) return cached;
+
+  const distances = corridors.map((road) => distanceToRoad(x, z, road.points));
+  operationalRoadDistanceCache.set(key, distances);
+  return distances;
+}
+
 export function clearOfOperationalRoads(
   x: number,
   z: number,
@@ -72,9 +84,9 @@ export function clearOfOperationalRoads(
 ) {
   // Shoulder clearance includes the HD wheel overhang. The extra 0.05 covers
   // the small error between the spline and its densely sampled segments.
+  const distances = distanceToOperationalRoads(x, z);
   return corridors.every(
-    (road) =>
-      distanceToRoad(x, z, road.points) >
-      road.halfWidth + 0.75 + footprintRadius + 0.05,
+    (road, i) =>
+      distances[i] > road.halfWidth + 0.75 + footprintRadius + 0.05,
   );
 }
